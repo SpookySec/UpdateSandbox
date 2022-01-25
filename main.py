@@ -5,8 +5,11 @@ import os
 import sys
 
 local_head = git.Repo(search_parent_directories=True).head.object.hexsha
-remote_head = git.cmd.Git().ls_remote(repo_url, heads=True)
+remote_head = git.cmd.Git().ls_remote(repo_url).split('\t')[0]
 _startup_cwd = os.getcwd()
+
+print(local_head)
+print(remote_head)
 
 # If they don't match then there are updates
 if local_head != remote_head:
@@ -21,3 +24,6 @@ if local_head != remote_head:
 
         os.chdir(_startup_cwd)
         os.execv(sys.executable, args)
+else:
+    print('[!] No updates available!')
+    print_updates()
